@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Responsivo</title>
+	<link rel="stylesheet" href="css/bootstrap.css" media="screen">
+	<link rel="stylesheet" href="css/bootstrap-responsive.css">
+	<style type="text/css" media="screen">
+		.centralizado {
+			margin: 0 auto;
+			float: none;
+		}
+		ul.thumbnails img{
+			height: 207px;
+			width: 320px;
+		}
+	</style>
+</head>
+<body>
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<div class="container">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-th-list"></span>
+				</a>
+				<a href="#" class="brand">responsivo</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav pull-right">
+						<li><a href="#">Home</a></li>
+						<li><a href="#">About Us</a></li>
+						<li><a href="#">Contact</a></li>
+						<li><a href="/users/sign_up">Sign Up</a></li>
+						<li class="divider-vertical"></li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
+							<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
+								<form action="[YOUR ACTION]" method="post" accept-charset="UTF-8">
+									<input id="nome_usuario" style="margin-bottom: 15px;" type="text" name="user[nome_usuario]" size="30" />
+									<input id="senha_usuario" style="margin-bottom: 15px;" type="password" name="user[senha_usuario]" size="30" />
+									<input id="usuario_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
+									<label class="string optional" for="usuario_remember_me"> Remember me</label>
+									<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
+								</form>
+							</div>
+						</li>
+						<li>
+							<form class="form-search">
+								<div class="input-append">
+									<input type="text" class="span2 search-query" placeholder="Procure seu produto">
+									<button type="submit" class="btn"><i class="icon-search"></i></button>
+								</div>
+							</form>
+						</li>
+					</ul>	
+				</div> <!-- fim nav-collapse-->
+			</div> <!-- fim container-->
+		</div> <!-- fim navbar inner-->
+
+		<!--alertas-->
+		<div id="alerts-container"></div>
+		<!--alertas-->
+
+	</div> <!-- fim navbar fixed-->
+
+	<div class="centralizado row">
+			<!--hero-unit-->
+			<div id="hero-unit-container"></div>
+			<!--hero-unit-->
+	</div>
+
+
+	<div class="container-fluid">
+		<div class="row-fluid">
+
+
+			<div class="span2">
+				<div class="well sidebar-nav">
+					<ul class="nav nav-list">
+						<li class="nav-header">Categorias</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="span8">
+				<!--carousel-->
+				<div id="this-carousel-id" class="carousel slide">
+				</div>
+				<!--carousel-->
+			</div>
+
+			<div class="span2"></div>
+
+			<!--texto-container-->
+			<div id="texto-container" class="container">
+			</div>
+			<!--texto-container-->
+
+			<div class="span2"></div>
+
+
+
+
+			<div class="container well"> 
+				<!--Listagem de produtos--> 
+				<ul class="thumbnails">  
+					<div class="pagination" style="text-align:center">  
+						<ul>  
+							<li><a href="#">Prev</a></li>  
+							<li class="active">  
+								<a href="#">1</a>  
+							</li>  
+							<li><a href="#">2</a></li>  
+							<li><a href="#">3</a></li>  
+							<li><a href="#">4</a></li>  
+							<li><a href="#">Next</a></li>  
+						</ul>  
+					</div>  
+				</ul>  
+				<!--Listagem de produtos--> 
+				<hr/>  
+			</div> <!--fim container well-->  
+
+
+		</div> <!--fim row-fluid-->
+	</div><!-- fim container-fluid-->
+
+	<!---->
+	<!-- Modal produto -->
+	<div id="modal-produto-container"></div>
+	<!-- Modal produto -->
+
+	<!-- Form produto -->
+	<div id="form-produto-container"></div>
+	<!-- Form produto -->
+	<!---->
+
+	<div class="span12">
+		<div class="span12">
+			<ul class="nav nav-list well fit-content">
+				<li class="nav-header">Our Services</li>
+				<li><a class="active"  href="">Overview</a></li>
+				<li><a href="">Web Development</a></li>
+				<li><a href="">Web Design</a></li>
+				<li><a href="">Dry Cleaning</a></li>
+				<li class="divider"></li>
+				<li><a href="">One More</a></li>
+			</ul>
+		</div>
+	    <footer class="span12" style="text-align: center"> 
+	    	<p>© Company 2012</p>  
+	    </footer> 
+	</div>
+
+				<!--JAVASCRIPT-->	
+		<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+		<!--<script src="js/jquery-1.7.1.min.js"></script>-->
+		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+
+			/** Include HTMLs*/
+			$('#hero-unit-container').load('html/hero-unit.html');
+			$('#this-carousel-id').load('html/carousel.html');
+			$('#texto-container').load('html/texto-container.html');
+			$('#modal-produto-container').load('html/modal-produto-container.html');
+			$('#form-produto-container').load('html/form-produto-container.html');
+			$('#alerts-container').load('html/alerts-container.html');
+
+
+			/** BINDS */
+			/**Animação da vitrine */
+			$('#this-carousel-id').on('DOMNodeInserted',function(e){
+				$el = $(e.target);			
+				if($el.attr('data-slide')=='next'){
+					$("#this-carousel-id").find('a').click(function(){
+						console.log("vitrine")}).trigger('click');
+				}
+			});
+			
+			/**Submit form */
+			$("#form-produto-container").on('DOMNodeInserted',function(e){
+				$el = $(e.target);	
+				$submmit = $el.find('a.btn-success');
+				
+					$submmit.on("click",function(e){
+						console.log("submit");
+						e.preventDefault();
+						name = $("#nome_produto").val();
+						price = parseFloat($("[name='preço_produto']").val());
+						tags = $("[name='tags_produto']").val();
+						desc = $("#descricao_produto").val();
+						place = $("#local_produto").val();
+
+						array_tags = Array();
+						array_tags = tags.split(' ');
+
+						cats = $("[name='categorias_produto[]']");
+						category_ids = Array();
+
+						cats.each(function(i,it){
+							$el = $(it);
+							if($el.is(':checked')){
+							//console.log("checkado");
+							category_ids[i] = parseInt($el.val());
+						}else{
+							//console.log("N checkado");
+						}
+					});
+						image = $("#fileInput").val();
+
+						dataproduct = { "product":{"name": name, "price" : price, "description" : desc, "place" : place, "tag_list" : array_tags, "category_ids" : category_ids }};
+						console.log(dataproduct);
+
+						$.ajax({
+							type: 'post',
+							url: rootURL+'/products.json',
+							data: dataproduct,
+
+							success: function(data){
+								console.log("Y");
+								console.log(data);
+								$msg = $("#formProduto").find("div.modal-header").find("h3");
+								$msg.addClass("alert alert-success");
+								$msg.html("Seu produto foi cadastrado com sucesso !!!").show(1000);
+								$msg.fadeOut(7000);
+								$msg.removeClass("alert-success").html("Cadastre seu produto !");
+							},
+							error: function(xhjqr){
+								console.log("N");
+								console.log(xhjqr);
+								$msg = $("#formProduto").find("div.modal-header").find("h3");
+								$msg.html(xhjqr.responseText).addClass("alert alert-error");
+							//$msg.show(1000);
+							//$msg.fadeOut(7000);
+							$msg.removeClass("alert alert-error").html("Cadastre seu Produto !");
+						},
+					});
+				});
+			});
+
+
+			/**Limpa os campos do produto quando fecha o modal*/
+			$('#modal-produto-container').on('DOMNodeInserted',function(e){
+				$el = $(e.target);	
+				$el.on('hidden',function(e){
+					$("#preco_produto").html("Preço : R$ ");
+					$("#data_produto").html("Data : ");
+					$("#nome_produto").html("");
+					$("#foto_produto").attr("src","");
+					$("#tags_produto").html("Tags : ");
+					$("#categorias_produto").html("");
+				});
+			});
+
+
+$(".form-search").css("margin","5px 0 0 0");
+		/*$(".well").css("margin-left","-15px");
+		//$(".well").css("width","120px");
+		$(".hero-unit").css("margin-bottom","10px");
+		$(".hero-unit").css("height","120px");
+		$("#texto").css("margin","0 0 10px 20px");*/
+
+		/**REST**/
+
+// A URL raiz para os serviços RESTful
+//var rootURL = "http://localhost:3000";
+var rootURL = "http://servidorapp.herokuapp.com";
+
+var produtoAtual;
+
+// Recupera a lista de Produtos (quando a applicação starta)
+findAll();
+
+function renderData(data){
+	subs = data.substr(0,10);
+	dataArray = subs.split('-');
+	
+	return dataArray[2]+"/"+dataArray[1]+"/"+dataArray[0];
+}
+
+function renderizarLista(data) {
+
+	produtos = data.products;
+	urls = data.urls;
+
+	//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
+	$('ul.thumbnails').find('li').remove();
+	
+		for(var i in produtos){
+		//console.log(urls[i]);
+		foto = urls[i]!= "/images/original/missing.png"? urls[i] : "./img/semfoto/semfoto.png";
+
+		$('ul.thumbnails').append('<li class="span4" data-identity="' + produtos[i].id + '"><div class="thumbnail"><h4 style="text-align:center">'+produtos[i].name+'</h4><img src="'+foto+'" alt="product 1"><div class="caption"><h5 style="text-align:center">Detalhe do produto</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore       magna aliqua.</p><p style="text-align:center"><a href="#modal_produto" data="' + produtos[i].id + '" data-toggle="modal" class="btn btn-success btn-large"><i class="icon-white icon-play-circle"></i>Detalhes do produto</a></p></div></div></li>');
+	};	
+
+	//Visualizar produto			
+	$("div.thumbnail").find("a.btn-success").on('click',function(){
+
+		var idproduto = $(this).closest('li').attr('data-identity');
+		//console.log(idproduto);
+
+		$descricao_produto = $("#modal_produto").find('p#descricao_produto');
+		//$descricao_produto.html(idproduto);
+
+		/**Executa ajax dentro do modal de produto passando id para recuperar os dados do produto*/
+		$("#modal_produto").ready(function(){
+			console.log('findOne');
+			$.ajax({
+				url: rootURL+"/products/"+idproduto+".js",
+				dataType: "jsonp",
+				type: "GET",
+				processData: false,
+				contentType: "application/json",
+				success: function(data) {
+					
+					var cats = "Categorias : ";
+
+					$("#preco_produto").html("Preço : R$ "+data.product.price);
+					$("#data_produto").html("Data : "+renderData(data.product.created_at));
+
+					$("#nome_produto").html(data.name);
+					if(data.foto!="/images/original/missing.png"){
+						$("#foto_produto").attr("src",data.foto);	
+					}else{
+						$("#foto_produto").attr("src","./img/semfoto/semfoto.png");	
+					}
+					$("#tags_produto").html("Tags : "+data.tags);
+					
+					for(var i in data.categorias){
+
+						cats+=data.categorias[i].name+" ";
+					}
+					$("#categorias_produto").html(cats);		
+
+				},
+				error: function(xhjqr){
+					console.log("erro em products/id");
+					console.log(xhjqr);
+				}
+			});
+});
+});
+}// fim renderizarLista
+
+function renderizarCategorias(data) {
+	console.log('renderizarCategorias')
+	var list = data == null ? [] : (data instanceof Array ? data : [data]);
+	//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
+	$(".sidebar-nav").find("ul.nav-list").find(":not(.nav-header)").remove();
+	$("#produtos_categorias").find("div.controls").find("label.inline").remove();
+	$.each(list, function(index, categoria) {
+		$('.sidebar-nav').find('ul.nav-list').append('<li><a href="'+rootURL+'/categories_products/'+categoria.id+'">'+categoria.name+'</a></li>');
+
+	//adiciona as categorias no formulário
+	$("#produtos_categorias").find("div.controls").append('<label class="checkbox inline"><input id="categorias_produto" name="categorias_produto[]" value="'+categoria.id+'" type="checkbox">'+categoria.name+'</label>');
+});
+
+	//listar por categoria
+	$(".sidebar-nav").find("ul.nav-list").find("li").on('click',function(e){
+		console.log("busca por categoria");
+		e.preventDefault();
+		var url_categoria = $(this).children('a').attr("href");
+
+		$.ajax({
+			url: url_categoria+".js",
+			dataType: "jsonp",
+			type: "GET",
+			processData: false,
+			contentType: "application/json",
+			success: function(data) {
+
+				renderizarLista(data);
+			},
+			error: function(jqxhr){
+				console.log("erro em categories/id");
+				console.log(jqxhr);
+			}
+
+		});
+	});
+	$(".sidebar-nav").find("li").on('click',function(e){
+		e.preventDefault();
+		$(this).attr("class","active");
+		$(this).siblings().attr("class","");
+	});
+}// fim renderizarCategorias
+
+function findAll() {
+	console.log('findAll');
+
+	$.ajax({
+		url: rootURL+"/products.js",
+		dataType: "jsonp",
+		type: "GET",
+		processData: false,
+		contentType: "application/json",
+		success: function(data) {
+
+			$.each(data, function(index, item){
+			//console.log('i : '+index+'   '+'id : '+item.id+' '+'name : '+item.name+' '+'price : '+ item.price);
+		});
+			renderizarLista(data);
+		},
+		error: function(xhjqr){
+			console.log("erro em products/")
+			console.log(xhjqr);
+		}
+	});
+
+	$.ajax({
+		url: rootURL+"/categories.js",
+		dataType: "jsonp",
+		type: "GET",
+		processData: false,
+		contentType: "application/json",
+		success: function(data){
+			//console.log(data)
+			renderizarCategorias(data);
+		},
+		error: function(xhjqr){
+			console.log("erro em categories/");
+			console.log(jqxhr);
+		}
+	});
+}//fim findAll
+
+//Search
+$(".form-search").submit(function(e){
+	console.log("search");
+	e.preventDefault();
+
+	var tags = $(".search-query").val();
+
+	var array_tags = Array();
+	array_tags = tags.split(' ');
+	console.log(array_tags);
+
+	$.ajax({
+		url: rootURL+"/products_search/"+array_tags+".js/",
+		dataType: "jsonp",
+		type: "GET",
+		processData: false,
+		contentType: "application/json",
+		success: function(data){
+			console.log("quantos : " + data.products.length);
+			console.log(data);
+			if (data.products.length > 0 && data.products!==undefined && data.products!='') {
+				$(".alert-success").show(1000);
+				$(".alert-success").fadeOut(7000);
+				renderizarLista(data);
+			}else{
+				$(".alert-error").show(1000);
+				$(".alert-error").fadeOut(7000);
+			}
+		},
+		error: function(xhjqr){
+			console.log("erro no search");
+			console.log(xhjqr);
+		},
+	});
+});//fim da função search
+
+});//fim 
+
+</script>
+</body>
+</html>

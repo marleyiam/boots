@@ -1,0 +1,72 @@
+<form id="formProduto" class="modal hide fade in" style="display:none" enctype="multipart/form-data">
+	<fieldset>
+		<div class="modal-header">  
+			<a class="close" data-dismiss="modal">×</a>  
+			<h3>Cadastre seu Produto !</h3>  
+		</div>  
+		<div class="modal-body">  
+			<div class="control-group">
+				<!-- Text input-->
+				<label class="control-label" for="input01">Nome</label>
+				<div class="controls">
+					<input id="nome_produto" name="nome_produto" placeholder="nome do produto" class="input-xlarge" type="text"></div>
+				</div>
+
+				<div class="control-group">
+					<!-- Text input-->
+					<label class="control-label" for="input01">TAGS</label>
+					<div class="controls">
+						<input id="tags_produto" name="tags_produto" placeholder="tags do produto" class="input-xlarge" type="text">
+					</div>
+				</div>
+
+				<div class="control-group">
+					<!-- Prepended text-->
+					<label class="control-label">Preço</label>
+					<div class="controls">
+						<div class="input-prepend">
+							<span class="add-on">R$</span>
+							<input name="preço_produto" class="input-xlarge" placeholder="preço do produto" id="prependedInput" type="text" required >
+						</div>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<!-- Text input-->
+					<label class="control-label" for="input01">Local</label>
+					<div class="controls">
+						<input id="local_produto" name="local_produto" placeholder="local do produto" class="input-xlarge" type="text" ></div>
+					</div>
+
+					<div id="produtos_categorias" class="control-group">
+						<label class="control-label">Categorias</label>
+						<!-- Multiple Checkboxes -->
+						<div class="controls">
+
+						</div>
+					</div>
+
+					<div class="control-group">
+						<!-- Textarea -->
+						<label class="control-label">Descrição</label>
+						<div class="controls">
+							<div class="textarea">
+								<textarea id="descricao_produto" name="descricao_produto" type="" class=""> </textarea>
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label">Foto</label>
+						<!-- File Upload -->
+						<div class="controls">
+							<input class="input-file" id="fileInput" type="file">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">  
+					<a href="#" class="btn btn-success">Cadastrar</a>
+					<!--<button type="submit" class="btn btn-success">Cadastrar</button>-->
+					<a href="#" class="btn" data-dismiss="modal">Fecha</a>  
+				</div> 
+			</fieldset>
+		</form>
