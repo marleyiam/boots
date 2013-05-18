@@ -162,6 +162,47 @@
 		$('#form-produto-container').load('html/form-produto-container.html');
 		$('#alerts-container').load('html/alerts-container.html');
 
+		Object.values = function (obj) {
+		    var vals = [];
+		    for( var key in obj ) {
+		        if ( obj.hasOwnProperty(key) ) {
+		            vals.push(obj[key]);
+		        }
+		    }
+		    return vals;
+		}
+
+		function paramDictionary(obj){
+			key = obj;
+			str ='';
+			switch(key){
+				case 'name':
+					str = 'nome' ;
+				break;
+				case 'price':
+					str = 'preço' ;
+				break;
+				case 'category_ids':
+					str = 'categorias' ;
+				break;
+				case 'tag_list':
+					str = 'tags' ;
+				break;
+				case 'place':
+					str = 'local' ;
+				break;
+				default:
+					str = 'none' ;
+				break;
+			}
+			return str;
+		}
+
+		function printError(obj){
+			reposta = obj.responseText;
+			reposta = JSON.parse(reposta);
+			return paramDictionary(Object.keys(reposta)[0])+' '+Object.values(reposta)[0];
+		}
 
 		/** BINDS */
 		/**Animação da vitrine */
@@ -217,18 +258,19 @@
 						console.log(data);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
 						$msg.addClass("alert alert-success");
-						$msg.html("Seu produto foi cadastrado com sucesso !!!").show(1000);
+						$msg.html("Seu produto foi cadastrado com sucesso !!!");/*.show(1000);
 						$msg.fadeOut(7000);
-						$msg.removeClass("alert-success").html("Cadastre seu produto !");
+						$msg.removeClass("alert-success").html("Cadastre seu produto !");*/
 					},
 					error: function(xhjqr){
 						console.log("N");
 						console.log(xhjqr);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
-						$msg.html(xhjqr.responseText).addClass("alert alert-error");
-							//$msg.show(1000);
-							//$msg.fadeOut(7000);
-						$msg.removeClass("alert alert-error").html("Cadastre seu Produto !");
+						$msg.html(printError(xhjqr)).addClass("alert alert-error");
+						/*console.log($msg);
+							$msg.show(2000);
+							$msg.fadeOut(7000);
+						$msg.removeClass("alert alert-error").html("Cadastre seu Produto !");*/
 					},
 				});
 			});
@@ -293,10 +335,8 @@
 			$("div.thumbnail").find("a.btn-success").on('click',function(){
 
 				var idproduto = $(this).closest('li').attr('data-identity');
-				//console.log(idproduto);
 
 				$descricao_produto = $("#modal_produto").find('p#descricao_produto');
-				//$descricao_produto.html(idproduto);
 
 				/**Executa ajax dentro do modal de produto passando id para recuperar os dados do produto*/
 				$("#modal_produto").ready(function(){
@@ -338,7 +378,9 @@
 		}// fim renderizarLista
 
 		function renderizarCategorias(data) {
-			console.log('renderizarCategorias')
+			console.log('renderizarCategorias');
+
+			var list = data == null ? [] : (data instanceof Array ? data : [data]);
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
 			$(".sidebar-nav").find("ul.nav-list").find(":not(.nav-header)").remove();
 			$("#produtos_categorias").find("div.controls").find("label.inline").remove();
