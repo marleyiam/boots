@@ -189,8 +189,10 @@
 				var file = document.getElementById('fileInput').files[0]; 
 			
 				create_blob(file, function(blob_string) {
+	
 					image = retornaBlob(blob_string);
 				});
+				console.log(image);
 			}).trigger('click');
 
 			$submmit.on("click",function(e){
@@ -218,7 +220,7 @@
 
 				dataproduct = { "product":{"name": name, "price" : price, "description" : desc, "place" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image }};
 				console.log(dataproduct);
-				/*
+				
 				$.ajax({
 					type: 'post',
 					url: rootURL+'/products.json',
@@ -237,7 +239,7 @@
 						$msg.html(printError(xhjqr)).addClass("alert alert-error");
 						$msg.show(2000);
 					},
-				});*/
+				});
 			});
 		});
 

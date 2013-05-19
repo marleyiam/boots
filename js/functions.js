@@ -50,7 +50,8 @@ function retornaBlob(blob){
 
 function create_blob(file, callback) {
     var reader = new FileReader();
-    //reader.readAsBinaryString(file);
-    reader.onload = function() { callback(reader.result) };
+    reader.onload = function() { callback(reader.result.split("data:image/jpeg;base64,")[1]) };
     reader.readAsDataURL(file);
+    //reader.readAsArrayBuffer(file);
+    //reader.readAsBinaryString(file);
 }
