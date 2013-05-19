@@ -15,6 +15,9 @@
 			height: 207px;
 			width: 320px;
 		}
+		.row-fluid .span4 {
+		    width: 30.6239%;
+		}
 	</style>
 </head>
 <body>
@@ -151,10 +154,10 @@
 	<!--<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>-->
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
-	<script src="js/bootstrap.file-input.js"></script>
 	<script src="js/functions.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function() {
+		var image = "";
 
 		/** Include HTMLs*/
 		$('#hero-unit-container').load('html/hero-unit.html');
@@ -174,24 +177,31 @@
 			}
 		});
 
-		/**Submit form */
+
+		/**Submit form + Upload Blob */
 		$("#form-produto-container").on('DOMNodeInserted',function(e){
 			$el = $(e.target);	
 			$submmit = $el.find('a.btn-success');
+			$upload = $("#form-produto-container");
+
+			$upload.delegate('#file-upload-btn','click',function(e){
+				//console.log('upload');
+				var file = document.getElementById('fileInput').files[0]; 
+			
+				create_blob(file, function(blob_string) {
+					image = retornaBlob(blob_string);
+				});
+			}).trigger('click');
 
 			$submmit.on("click",function(e){
 				console.log("submit");
 				e.preventDefault();
 				name = $("#nome_produto").val();
-				price = parseFloat($("[name='preço_produto']").val());
+				price = $("[name='preço_produto']").val();
+				price = price!=""? parseFloat(price) : price;
 				tags = $("[name='tags_produto']").val();
 				desc = $("#descricao_produto").val();
 				place = $("#local_produto").val();
-				//image = $(".fileupload-preview.fileupload-exists.thumbnail").find('img').attr('src');
-				//$('.fileupload').fileupload({uploadtype: 'image'});
-				//console.log(image);
-				//image = $("#fileInput").val();
-
 				array_tags = Array();
 				array_tags = tags.split(' ');
 
@@ -201,17 +211,14 @@
 				cats.each(function(i,it){
 					$el = $(it);
 					if($el.is(':checked')){
-							//console.log("checkado");
-							category_ids[i] = parseInt($el.val());
-						}else{
-							//console.log("N checkado");
-						}
-					});
-				image = $("#fileInput").val();
+						category_ids[i] = parseInt($el.val());
+					}else{
+					}
+				});
 
 				dataproduct = { "product":{"name": name, "price" : price, "description" : desc, "place" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image }};
 				console.log(dataproduct);
-
+				/*
 				$.ajax({
 					type: 'post',
 					url: rootURL+'/products.json',
@@ -230,7 +237,7 @@
 						$msg.html(printError(xhjqr)).addClass("alert alert-error");
 						$msg.show(2000);
 					},
-				});
+				});*/
 			});
 		});
 
