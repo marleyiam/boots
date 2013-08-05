@@ -331,7 +331,6 @@
 			produtos = data.products;
 			urls = data.urls;
 
-
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
 			$('ul.thumbnails').find('li').remove();
 	
@@ -388,7 +387,7 @@
 			}); //fim click produto
 			$('html, body').animate({
                 scrollTop: $(".container.well").offset().top
-            }, 1500);
+            }, 2000);
 		}// fim renderizarLista
 
 		function renderizarCategorias(data) {
@@ -404,6 +403,12 @@
 			//adiciona as categorias no formulário de cadastro de produto
 			$("#produtos_categorias").find("div.controls").append('<label class="checkbox inline"><input id="categorias_produto" name="categorias_produto[]" value="'+categoria.id+'" type="checkbox">'+categoria.name+'</label>');
 			});
+			//adiciona os locais no formulario de produto
+			$(".dropdown-menu").find("li").each(function(i,it){
+			//console.log($(it).attr("data-id"))
+			$("#local_produto").append('<option value="'+$(it).attr("data-id")+'">'+$(it).text()+'</option>')
+			})
+
 
 			//listar por categoria
 			$(".sidebar-nav").find("ul.nav-list").find("li").on('click',function(e){
@@ -440,7 +445,7 @@
 		
 			for(var i in locais){
 				//
-				$("ul.dropdown-menu").append('<li><a href="'+rootURL+'/locals_search/'+locais[i].id+'.js">'+locais[i].name+'</a></li>');
+				$("ul.dropdown-menu").append('<li data-id="'+locais[i].id+'"><a href="'+rootURL+'/locals_search/'+locais[i].id+'.js">'+locais[i].name+'</a></li>');
 			};
 		}// fim renderizarLocais
 
@@ -454,7 +459,6 @@
 				processData: false,
 				contentType: "application/json",
 				success: function(data) {
-
 					//$.each(data, function(index, item){
 					//console.log('i : '+index+'   '+'id : '+item.id+' '+'name : '+item.name+' '+'price : '+ item.price);
 					//});
