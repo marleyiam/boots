@@ -3,7 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Responsivo</title>
+	<meta http-equiv='cache-control' content='no-cache'>
+	<meta http-equiv='expires' content='0'>
+	<meta http-equiv='pragma' content='no-cache'>
+
+	<title>Quanto Custa?</title>
 	<link rel="stylesheet" href="css/bootstrap.css" media="screen">
 	<link rel="stylesheet" href="css/bootstrap-responsive.css">
 	<style type="text/css" media="screen">
@@ -27,13 +31,21 @@
 				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 					<span class="icon-th-list"></span>
 				</a>
-				<a href="#" class="brand">responsivo</a>
+				<a href="#" class="brand">Quanto Custa?</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav pull-right">
 						<li><a href="#">Home</a></li>
 						<li><a href="#">About Us</a></li>
 						<li><a href="#">Contact</a></li>
-						<li><a href="/users/sign_up">Sign Up</a></li>
+
+						<li class="dropdown">
+						 <a class="dropdown-toggle" data-toggle="dropdown"
+						   href="#">Locais<b class="caret"></b>
+						 </a>
+						   <ul class="dropdown-menu">
+						   </ul>
+						</li>
+
 						<li class="divider-vertical"></li>
 						<li class="dropdown">
 							<a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
@@ -155,7 +167,7 @@
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/functions.js"></script>
-	<script type="text/javascript">
+	<script async defer>
 	$(document).ready(function() {
 		var image = "";
 
@@ -187,20 +199,40 @@
 			$upload.delegate('#file-upload-btn','click',function(e){
 				//console.log('upload');
 				var file = document.getElementById('fileInput').files[0]; 
-			
+		
+				path = file.mozFullPath;
+				name = file.name;
+				size = file.size;
+				type = file.type;
+				data = file.lastModifiedDate;
+				json_file = {'name':name,'size':size,'type':type,'path':path};
+
 				create_blob(file, function(blob_string) {
 
-					image = retornaBlob(blob_string);
-
 					 var url = blob_string.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-					 //$("#img-preview img").attr('src',url);
+
 					 $(".fileupload-new.thumbnail img").attr('src',url);
+
 				});
-				console.log(image);
+				create_blob2(file, function(blob_string) {
+					console.log('blob2');
+					 //var url = blob_string.replace(/^data:image\/[^;]/, 'data:image/jpeg');
+
+					var nnn = retornaBlob(blob_string);
+					//image = stringToAscii(decodeBase64(nnn));
+					//image = decodeBase64(nnn);//";
+					image = nnn;
+					//image = encodeURIComponent(nnn);
+					//image  = encode_utf8(image);
+					//image  = utf8encode(image);
+
+					console.log(image);
+
+				});
 			}).trigger('click');
 
 			$submmit.on("click",function(e){
-				console.log("submit");
+				console.log("submmit");
 				e.preventDefault();
 				name = $("#nome_produto").val();
 				price = $("[name='preço_produto']").val();
@@ -222,13 +254,18 @@
 					}
 				});
 
-				dataproduct = { "product":{"name": name, "price" : price, "description" : desc, "place" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image }};
+				/*image = {"image":{"file" : file, :original_filename : "my_file_name", filename : "my_file_name"}};*/
+
+				dataproduct = { "product":{"name" : name, "price" : price, "description" : desc, "place" : place, "tag_list" : array_tags, "category_ids" : category_ids, "file" : image }};
+
 				console.log(dataproduct);
 				
 				$.ajax({
 					type: 'post',
-					url: rootURL+'/products.json',
+					url: rootURL+'/ajax_product.json',
 					data: dataproduct,
+					dataType: "json",
+					contentType: "application/x-www-form-urlencoded;charset=utf-8",
 
 					success: function(data){
 						console.log(data);
@@ -237,11 +274,13 @@
 						$msg.addClass("alert alert-success");
 						$msg.html("Seu produto foi cadastrado com sucesso !!!");
 					},
-					error: function(xhjqr){
+					error: function(xhjqr,b,c){
 						console.log(xhjqr);
+						console.log(b);
+						console.log(c);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
-						$msg.html(printError(xhjqr)).addClass("alert alert-error");
-						$msg.show(2000);
+						//$msg.html(printError(xhjqr)).addClass("alert alert-error");
+						//$msg.show(2000);
 					},
 				});
 			});
@@ -272,8 +311,8 @@
 							/**REST**/
 
 		// A URL raiz para os serviços RESTful
-		//var rootURL = "http://localhost:3000";
-		var rootURL = "http://servidorapp.herokuapp.com";
+		var rootURL = "http://localhost:3000";
+		//var rootURL = "http://servidorapp.herokuapp.com";
 
 		var produtoAtual;
 
@@ -291,6 +330,7 @@
 
 			produtos = data.products;
 			urls = data.urls;
+
 
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
 			$('ul.thumbnails').find('li').remove();
@@ -345,7 +385,10 @@
 						}
 					});
 				});
-			});
+			}); //fim click produto
+			$('html, body').animate({
+                scrollTop: $(".container.well").offset().top
+            }, 1500);
 		}// fim renderizarLista
 
 		function renderizarCategorias(data) {
@@ -358,7 +401,7 @@
 			$.each(list, function(index, categoria) {
 				$('.sidebar-nav').find('ul.nav-list').append('<li><a href="'+rootURL+'/categories_products/'+categoria.id+'">'+categoria.name+'</a></li>');
 
-			//adiciona as categorias no formulário
+			//adiciona as categorias no formulário de cadastro de produto
 			$("#produtos_categorias").find("div.controls").append('<label class="checkbox inline"><input id="categorias_produto" name="categorias_produto[]" value="'+categoria.id+'" type="checkbox">'+categoria.name+'</label>');
 			});
 
@@ -391,9 +434,19 @@
 			});
 		}// fim renderizarCategorias
 
+		function renderizarLocais(data) {
+
+			locais = data.locals;
+		
+			for(var i in locais){
+				//
+				$("ul.dropdown-menu").append('<li><a href="'+rootURL+'/locals_search/'+locais[i].id+'.js">'+locais[i].name+'</a></li>');
+			};
+		}// fim renderizarLocais
+
 		function findAll() {
 			console.log('findAll');
-	
+				/** PRODUTOS */
 			$.ajax({
 				url: rootURL+"/products.js",
 				dataType: "jsonp",
@@ -402,9 +455,9 @@
 				contentType: "application/json",
 				success: function(data) {
 
-					$.each(data, function(index, item){
+					//$.each(data, function(index, item){
 					//console.log('i : '+index+'   '+'id : '+item.id+' '+'name : '+item.name+' '+'price : '+ item.price);
-					});
+					//});
 					renderizarLista(data);
 				},
 				error: function(xhjqr){
@@ -412,7 +465,7 @@
 					console.log(xhjqr);
 				}
 			});
-
+				/** CATEGORIAS */
 			$.ajax({
 				url: rootURL+"/categories.js",
 				dataType: "jsonp",
@@ -428,7 +481,48 @@
 					console.log(jqxhr);
 				}
 			});
-		}//fim findAll
+
+
+			/** LOCAIS */
+			$.ajax({
+				type: "GET",
+				url: rootURL + "/locals.js",
+				dataType: 'jsonp',
+				processData: false,
+				contentType: "application/json",
+				success: function(data){
+			    	//console.log(data)
+			    	renderizarLocais(data);
+				},
+				error: function(jqxhr){
+			    	console.log(jqxhr)
+				}
+			});
+
+		}//fim findAll	
+
+		/** Renderizar lista de produtos de acordo com o local */
+		//$("ul.dropdown-menu").on('click','li.a',function(e){
+		$("ul.dropdown-menu").delegate('a','click',function(e){
+			e.preventDefault();
+			
+			link = $(this).attr('href');
+			console.log(link)
+			$.ajax({
+				type: "GET",
+				url: link,
+				dataType: "jsonp",
+				processData: false,
+				contentType: "application/json",
+				success: function(data){
+		    		console.log(data);
+		    		renderizarLista(data);
+				},
+				error: function(jqxhr){
+		    	console.log(jqxhr);
+				}
+			});
+		});
 
 		//Search
 		$(".form-search").submit(function(e){
