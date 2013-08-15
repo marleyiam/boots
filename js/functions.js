@@ -48,6 +48,7 @@ function printError(obj){
 	return paramDictionary(Object.keys(reposta)[0])+' '+Object.values(reposta)[0]+' '+server;
 }
 
+/** Expoe o arquivo encodado para fora do escopo do evento */
 function retornaBlob(blob){
 	return blob;
 }
@@ -61,21 +62,15 @@ function create_blob(file, callback) {
     reader.readAsDataURL(file);
 }
 
+/** Responsavel por retornar um arquivo base64encoded */
 function create_blob2(file, callback) {
     var reader2 = new FileReader();
-    //reader2.onload = function() { callback(reader2.result.split("data:image/jpeg;base64,")[1]) };
     reader2.onload = function() { callback(reader2.result) };
-
-    //reader2.readAsDataURL(file);
-    reader2.readAsBinaryString(file);
-    //reader2.readAsText(file);
-    //reader2.readAsArrayBuffer(file);
-
-    //readAsArrayBuffer() will give you a Uint8Array and you can use the method specified.
-    //This is probably only useful if you want to mess with the data itself, 
-    //such as manipulating image data or doing other voodoo magic before you upload.
+    reader2.readAsDataURL(file);
 }
 
+
+/** Varias funcoes de file encoding que um dia poderao ser usadas (ou nao)*/
 function encode_utf8(s) {
  return unescape(encodeURIComponent(s));
 }
