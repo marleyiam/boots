@@ -22,6 +22,9 @@
 		.row-fluid .span4 {
 		    width: 30.6239%;
 		}
+		.hero-unit {
+		     height: 140px;
+		 }
 	</style>
 </head>
 <body>
@@ -47,23 +50,14 @@
 						</li>
 
 						<li class="divider-vertical"></li>
-						<li class="dropdown">
-							<a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-							<div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-								<form action="[YOUR ACTION]" method="post" accept-charset="UTF-8">
-									<input id="nome_usuario" style="margin-bottom: 15px;" type="text" name="user[nome_usuario]" size="30" />
-									<input id="senha_usuario" style="margin-bottom: 15px;" type="password" name="user[senha_usuario]" size="30" />
-									<input id="usuario_remember_me" style="float: left; margin-right: 10px;" type="checkbox" name="user[remember_me]" value="1" />
-									<label class="string optional" for="usuario_remember_me"> Remember me</label>
-									<input class="btn btn-primary" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-								</form>
-							</div>
-						</li>
+
 						<li>
 							<form class="form-search">
 								<div class="input-append">
 									<input type="text" class="span2 search-query" placeholder="Procure seu produto">
-									<button type="submit" class="btn"><i class="icon-search"></i></button>
+									<button type="submit" class="btn">
+										<i class="icon-search"></i>
+									</button>
 								</div>
 							</form>
 						</li>
@@ -135,7 +129,7 @@
 			</div> <!--fim row-fluid-->
 		</div><!-- fim container-fluid-->
 
-		<!---->
+		
 		<!-- Modal produto -->
 	<div id="modal-produto-container"></div>
 	<!-- Modal produto -->
@@ -143,13 +137,16 @@
 	<!-- Form produto -->
 	<div id="form-produto-container"></div>
 	<!-- Form produto -->
-	<!---->
+
+	<!-- Form local -->
+	<div id="form-local-container"></div>
+	<!-- Form local -->
 
 	<div class="span12">
 		<div class="span12">
 			<ul class="nav nav-list well fit-content">
 				<li class="nav-header">Our Services</li>
-				<li><a class="active"  href="">Overview</a></li>
+				<li><a class="active" href="">Overview</a></li>
 				<li><a href="">Web Development</a></li>
 				<li><a href="">Web Design</a></li>
 				<li><a href="">Dry Cleaning</a></li>
@@ -177,7 +174,77 @@
 		$('#texto-container').load('html/texto-container.html');
 		$('#modal-produto-container').load('html/modal-produto-container.html');
 		$('#form-produto-container').load('html/form-produto-container.html');
+		$('#form-local-container').load('html/form-local-container.html');
 		$('#alerts-container').load('html/alerts-container.html');
+
+		if(!Array.prototype.forEach) {
+		  Array.prototype.forEach = function(fun /*, thisp*/) {
+		    var len = this.length >>> 0;
+		    if(typeof fun != "function")
+		      throw new TypeError();
+
+		    var thisp = arguments[1];
+		    for (var i = 0; i < len; i++) {
+		      if (i in this)
+		        fun.call(thisp, this[i], i, this);
+		    }
+		  };
+		}
+
+		$.extend({
+		    range:  function() {
+		        if (!arguments.length) { return []; }
+		        var min, max, step;
+		        if (arguments.length == 1) {
+		            min  = 0;
+		            max  = arguments[0]-1;
+		            step = 1;
+		        }
+		        else {
+		            min  = arguments[0];
+		            max  = arguments[1]-1;
+		            step = arguments[2] || 1;
+		        }
+		        if (step < 0 && min >= max) {
+		            step *= -1;
+		            var tmp = min;
+		            min = max;
+		            max = tmp;
+		            min += ((max-min) % step);
+		        }
+		        var a = [];
+		        for (var i = min; i <= max; i += step) { a.push(i); }
+		        return a;
+		    }
+		});
+
+		function makeRange(vi,rg){
+			console.log('makeRange')
+		        $.range(vi, rg).forEach(function(v) {
+		           console.log(d.products[v])
+		           console.log(d.urls[v])
+		        //console.log('v :'+v); // 2, 3, 4, .., 9
+		    });
+		}
+		
+		function setVitrine(data){
+			console.log('setVitrine');
+			lf = d.products.length
+			vi = Math.floor((Math.random()*lf)+1);
+			rg = vi+5;
+			//console.log('lf :'+lf)
+			//console.log('vi :'+vi)
+			//console.log('rg :'+rg)
+			if(rg>lf){
+			    while(rg>lf){
+			        rg-=1;
+			        //console.log("rg :"+rg)
+			    }
+			    makeRange(vi,rg);
+			}else{
+			    makeRange(vi,rg);
+			}
+		}
 
 		/** BINDS */
 		/**Animação da vitrine */
@@ -190,14 +257,14 @@
 		});
 
 
-		/**Submit form + Upload Blob */
+		/**Submit frmPRODUTO + Upload Blob */
 		$("#form-produto-container").on('DOMNodeInserted',function(e){
 			$el = $(e.target);	
 			$submmit = $el.find('a.btn-success');
 			$upload = $("#form-produto-container");
 
 			$upload.delegate('#file-upload-btn','click',function(e){
-				//console.log('upload');
+
 				var file = document.getElementById('fileInput').files[0]; 
 
 				create_blob(file, function(blob_string) {
@@ -237,11 +304,9 @@
 					}
 				});
 
-				/*image = {"image":{"file" : file, :original_filename : "my_file_name", filename : "my_file_name"}};*/
-
 				dataproduct = { "product":{"name" : name, "price" : price, "description" : desc, "local_id" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image }};
 
-				console.log(dataproduct);
+				//console.log(dataproduct);
 				
 				$.ajax({
 					type: 'post',
@@ -262,6 +327,48 @@
 						console.log(b);
 						console.log(c);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
+						//$msg.html(printError(xhjqr)).addClass("alert alert-error");
+						//$msg.show(2000);
+					},
+				});
+			});
+		});
+
+
+		/**Submit frmLOCAL */
+		$("#form-local-container").on('DOMNodeInserted',function(e){
+			$el = $(e.target);	
+			$submmit = $el.find('a.btn-success');
+			$upload = $("#form-local-container");
+
+			$submmit.on("click",function(e){
+				console.log("submmit");
+				e.preventDefault();
+				name = $("#nome_local").val();
+
+				datalocal = { "local":{"name" : name}};
+
+				console.log(datalocal);
+				
+				$.ajax({
+					type: 'post',
+					url: rootURL+'/ajax_local.json',
+					data: datalocal,
+					dataType: "json",
+					contentType: "application/x-www-form-urlencoded;charset=utf-8",
+
+					success: function(data){
+						console.log(data);
+						$msg = $("#formLocal").find("div.modal-header").find("h3");
+						$msg.removeClass("alert alert-error");
+						$msg.addClass("alert alert-success");
+						$msg.html("Seu local foi cadastrado com sucesso !!!");
+					},
+					error: function(xhjqr,b,c){
+						console.log(xhjqr);
+						console.log(b);
+						console.log(c);
+						$msg = $("#formLocal").find("div.modal-header").find("h3");
 						//$msg.html(printError(xhjqr)).addClass("alert alert-error");
 						//$msg.show(2000);
 					},
@@ -310,7 +417,6 @@
 		}
 
 		function renderizarLista(data) {
-
 			produtos = data.products;
 			urls = data.urls;
 
@@ -321,7 +427,7 @@
 				//console.log(urls[i]);
 				foto = urls[i]!= "/images/original/missing.png"? urls[i] : "./img/semfoto/semfoto.png";
 
-				$('ul.thumbnails').append('<li class="span4" data-identity="' + produtos[i].id + '"><div class="thumbnail"><h4 style="text-align:center">'+produtos[i].name+'</h4><img src="'+foto+'" alt="product 1"><div class="caption"><h5 style="text-align:center">Detalhe do produto</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore       magna aliqua.</p><p style="text-align:center"><a href="#modal_produto" data="' + produtos[i].id + '" data-toggle="modal" class="btn btn-success btn-large"><i class="icon-white icon-play-circle"></i>Detalhes do produto</a></p></div></div></li>');
+				$('ul.thumbnails').append('<li class="span4" data-identity="' + produtos[i].id + '"><div class="thumbnail"><h4 style="text-align:center">'+produtos[i].name+'</h4><img src="'+foto+'" alt="product 1"><div class="caption"><h5 style="text-align:center">Detalhe do produto</h5><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><p style="text-align:center"><a href="#modal_produto" data="' + produtos[i].id + '" data-toggle="modal" class="btn btn-success btn-large"><i class="icon-white icon-play-circle"></i>Detalhes do produto</a></p></div></div></li>');
 			};	
 
 			//Visualizar produto			
@@ -427,7 +533,7 @@
 			locais = data.locals;
 		
 			for(var i in locais){
-				//
+			
 				$("ul.dropdown-menu").append('<li data-id="'+locais[i].id+'"><a href="'+rootURL+'/locals_search/'+locais[i].id+'.js">'+locais[i].name+'</a></li>');
 
 				$("#local_produto").append('<option value="'+locais[i].id+'">'+locais[i].name+'</option>');
