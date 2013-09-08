@@ -220,25 +220,26 @@
 
 		function makeRange(vi,rg){
 			console.log('makeRange')
+			var mk = 0;
 		        $.range(vi, rg).forEach(function(v) {
-		           console.log(d.products[v])
-		           console.log(d.urls[v])
+		           //console.log(d.products[v])
+		           //console.log(d.urls[v])
+		           mk++;
 		        //console.log('v :'+v); // 2, 3, 4, .., 9
+		        foto = d.urls[v]!= "/images/original/missing.png"? d.urls[v] : "./img/semfoto/semfoto.png";
+		        display = mk==1?'item active':'item';
+		        it = '<div class="'+display+'"><img src="'+foto+'" alt="" /><div class="carousel-caption"><p>'+d.products[v].description+'</p></div></div>';
+		        $(".carousel-inner").append(it);
 		    });
 		}
 		
 		function setVitrine(data){
-			console.log('setVitrine');
 			lf = d.products.length
 			vi = Math.floor((Math.random()*lf)+1);
 			rg = vi+5;
-			//console.log('lf :'+lf)
-			//console.log('vi :'+vi)
-			//console.log('rg :'+rg)
 			if(rg>lf){
 			    while(rg>lf){
 			        rg-=1;
-			        //console.log("rg :"+rg)
 			    }
 			    makeRange(vi,rg);
 			}else{
@@ -249,9 +250,9 @@
 		/** BINDS */
 		/**Animação da vitrine */
 		$('#this-carousel-id').on('DOMNodeInserted',function(e){
-			$el = $(e.target);			
+			//$el = $(e.target);			
 			if($el.attr('data-slide')=='next'){
-				$("#this-carousel-id").find('a').click(function(){
+				$("#this-carousel-id").on('click','a',function(){
 					console.log("vitrine")}).trigger('click');
 			}
 		});
@@ -417,12 +418,13 @@
 		}
 
 		function renderizarLista(data) {
+			d = data;
 			produtos = data.products;
 			urls = data.urls;
 
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
 			$('ul.thumbnails').find('li').remove();
-	
+			setVitrine(d);
 			for(var i in produtos){
 				//console.log(urls[i]);
 				foto = urls[i]!= "/images/original/missing.png"? urls[i] : "./img/semfoto/semfoto.png";
