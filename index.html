@@ -251,7 +251,7 @@
 		/**Animação da vitrine */
 		$('#this-carousel-id').on('DOMNodeInserted',function(e){
 			//$el = $(e.target);			
-			if($el.attr('data-slide')=='next'){
+			if($el.attr('data-slide') == 'next'){
 				$("#this-carousel-id").on('click','a',function(){
 					console.log("vitrine")}).trigger('click');
 			}
@@ -263,6 +263,7 @@
 			$el = $(e.target);	
 			$submmit = $el.find('a.btn-success');
 			$upload = $("#form-produto-container");
+			$clear = $el.find('a.clearFrm');
 
 			$upload.delegate('#file-upload-btn','click',function(e){
 
@@ -270,20 +271,19 @@
 
 				create_blob(file, function(blob_string) {
 
-					 var url = blob_string.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+					var url = blob_string.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
 
-					 $(".fileupload-new.thumbnail img").attr('src',url);
+					$(".fileupload-new.thumbnail img").attr('src',url);
 
 				});
 				create_blob2(file, function(blob_string) {
-					console.log('blob2');
 					var nnn = retornaBlob(blob_string);
 					image = nnn;
 				});
 			}).trigger('click');
 
 			$submmit.on("click",function(e){
-				console.log("submmit");
+				//console.log("submmit");
 				e.preventDefault();
 				name = $("#nome_produto").val();
 				price = $("[name='preço_produto']").val();
@@ -333,6 +333,15 @@
 					},
 				});
 			});
+
+				/** Clear Form*/
+		    	$clear.on("click",function(e){
+		    		console.log('reset');
+					e.preventDefault();
+					$("#formProduto").trigger("reset");
+					dataproduct = Object;
+					$(".fileupload-new.thumbnail").find("img").attr("src","http://www.placehold.it/50x50/EFEFEF/AAAAAA");
+				});
 		});
 
 
@@ -340,7 +349,6 @@
 		$("#form-local-container").on('DOMNodeInserted',function(e){
 			$el = $(e.target);	
 			$submmit = $el.find('a.btn-success');
-			$upload = $("#form-local-container");
 
 			$submmit.on("click",function(e){
 				console.log("submmit");
@@ -349,7 +357,7 @@
 
 				datalocal = { "local":{"name" : name}};
 
-				console.log(datalocal);
+				//console.log(datalocal);
 				
 				$.ajax({
 					type: 'post',
@@ -377,7 +385,6 @@
 			});
 		});
 
-
 		/**Limpa os campos do produto quando fecha o modal*/
 		$('#modal-produto-container').on('DOMNodeInserted',function(e){
 			$el = $(e.target);	
@@ -390,7 +397,6 @@
 				$("#categorias_produto").html("");
 			});
 		});
-
 
 		$(".form-search").css("margin","5px 0 0 0");
 		/*$(".well").css("margin-left","-15px");
@@ -494,10 +500,8 @@
 			//adiciona as categorias no formulário de cadastro de produto
 			$("#produtos_categorias").find("div.controls").append('<label class="checkbox inline"><input id="categorias_produto" name="categorias_produto[]" value="'+categoria.id+'" type="checkbox">'+categoria.name+'</label>');
 			});
-			//adiciona os locais no formulario de produto
-			$(".dropdown-menu").find("li").each(function(i,it){
-			//console.log($(it).attr("data-id"))
-			/*$("#local_produto").append('<option value="'+$(it).attr("data-id")+'">'+$(it).text()+'</option>');*/
+				//adiciona os locais no formulario de produto
+				$(".dropdown-menu").find("li").each(function(i,it){
 			});
 
 
