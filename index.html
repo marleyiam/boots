@@ -490,7 +490,6 @@
 						processData: false,
 						contentType: "application/json",
 						success: function(data) {
-					
 							var cats = "Categorias : ";
 
 							$("#preco_produto").html("Preço : R$ "+data.product.price);
@@ -508,7 +507,8 @@
 
 								cats+=data.categorias[i].name+" ";
 							}
-							$("#categorias_produto").html(cats);		
+							$("#categorias_produto").html(cats);
+							$('#produto_descricao').html(data.product.description);	
 						},
 						error: function(xhjqr){
 							console.log("erro em products/id");
