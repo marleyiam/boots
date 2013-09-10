@@ -121,6 +121,19 @@
 
 				<div class="container well"> 
 					<!--Listagem de produtos--> 
+
+					<!--<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
+					        <div class="modal-header">
+					            <h1>Enviando...</h1>
+					        </div>
+					        <div class="modal-body">
+					            <div class="progress progress-striped active">
+					                <div class="bar" style="width: 100%;"></div>
+					            </div>
+					        </div>
+					</div>-->
+
+
 					<ul class="thumbnails">  
 						<div class="pagination" style="text-align:center">  
 							<ul>  
@@ -328,7 +341,13 @@
 					data: dataproduct,
 					dataType: "json",
 					contentType: "application/x-www-form-urlencoded;charset=utf-8",
-
+					beforeSend: function(data){
+						console.log(data)
+						$msg = $("#formProduto").find("div.modal-header").find("h3");
+						$img = $('<img src="img/loadingBar.gif" class="load-img">');
+						$msg.append($img)
+						//$("#pleaseWaitDialog").modal();
+					},
 					success: function(data){
 						console.log(data);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
@@ -337,13 +356,23 @@
 						$msg.html("Seu produto foi cadastrado com sucesso !!!");
 					},
 					error: function(xhjqr,b,c){
+						console.log('error');
 						console.log(xhjqr);
-						console.log(b);
-						console.log(c);
 						$msg = $("#formProduto").find("div.modal-header").find("h3");
-						//$msg.html(printError(xhjqr)).addClass("alert alert-error");
-						//$msg.show(2000);
+						$msg.html(printError(xhjqr)).addClass("alert alert-error");
+						$msg.show(2000);
 					},
+					complete: function(data){
+						console.log('complete');
+						console.log(data);
+						$msg = $("#formProduto").find("div.modal-header").find("h3");
+						$msg.find('.load-img').remove();
+						if(data.status==442){
+							$msg = $("#formProduto").find("div.modal-header").find("h3");
+							$msg.html(printError(xhjqr)).addClass("alert alert-error");
+							$msg.show(2000);	
+						}
+					}
 				});
 			});
 

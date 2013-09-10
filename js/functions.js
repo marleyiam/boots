@@ -39,11 +39,34 @@ function paramDictionary(obj){
 }
 
 function printError(obj){
+	console.log('PRINTERROR')
 	reposta = obj.responseText;
 	reposta = JSON.parse(reposta);
+	console.log('obj.responseText')
+	console.log(obj.responseText)
+	console.log('reposta')
+	console.log(reposta)
+	console.log('Object.keys(resposta)')
+	console.log(Object.keys(resposta))
 	server = "";
-	if(Object.keys(reposta)[1].length>0){
+
+	/** obj.responseText */
+	ob_str = {"name":["n\u00e3o pode ficar em branco"],"price":["n\u00e3o pode ficar em branco"],"category_ids":["n\u00e3o pode ficar em branco"],"tag_list":["n\u00e3o pode ficar em branco"],"description":["n\u00e3o pode ficar em branco"]}
+
+	/** reposta */
+	//Object { name=[1], price=[1], category_ids=[1], mais...}
+	//category_ids ["não pode ficar em branco"]
+	//description  ["não pode ficar em branco"]
+	//name		 ["não pode ficar em branco"]
+	//price		 ["não pode ficar em branco"]
+	//tag_list	 ["não pode ficar em branco"]
+
+	if(typeof(Object.keys(reposta)[0])!== undefined && Object.keys(reposta)[0].length>0){
 		server = Object.keys(reposta)[1];
+	}else{
+		console.log('printError ELSE');
+		console.log(reposta);
+		console.log(Object.keys(reposta));
 	}
 	return paramDictionary(Object.keys(reposta)[0])+' '+Object.values(reposta)[0]+' '+server;
 }
