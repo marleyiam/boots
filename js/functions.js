@@ -39,39 +39,20 @@ function paramDictionary(obj){
 }
 
 function printError(obj){
-	console.log('PRINTERROR')
-	reposta = obj.responseText;
-	reposta = JSON.parse(reposta);
-	console.log('obj.responseText')
-	console.log(obj.responseText)
-	console.log('reposta')
-	console.log(reposta)
-	console.log('Object.keys(resposta)')
-	console.log(Object.keys(resposta))
-	server = "";
+	resposta = obj.responseText;
+	resposta = JSON.parse(resposta);
 
-	/** obj.responseText */
-	ob_str = {"name":["n\u00e3o pode ficar em branco"],"price":["n\u00e3o pode ficar em branco"],"category_ids":["n\u00e3o pode ficar em branco"],"tag_list":["n\u00e3o pode ficar em branco"],"description":["n\u00e3o pode ficar em branco"]}
-
-	/** reposta */
-	//Object { name=[1], price=[1], category_ids=[1], mais...}
-	//category_ids ["não pode ficar em branco"]
-	//description  ["não pode ficar em branco"]
-	//name		 ["não pode ficar em branco"]
-	//price		 ["não pode ficar em branco"]
-	//tag_list	 ["não pode ficar em branco"]
-
-	if(typeof(Object.keys(reposta)[0])!== undefined && Object.keys(reposta)[0].length>0){
-		server = Object.keys(reposta)[1];
+	if(typeof(Object.keys(resposta)[0])!== undefined && Object.keys(resposta)[0].length>0){
+		server = Object.keys(resposta)[0];
 	}else{
 		console.log('printError ELSE');
-		console.log(reposta);
-		console.log(Object.keys(reposta));
+		console.log(resposta);
+		console.log(Object.keys(resposta));
 	}
-	return paramDictionary(Object.keys(reposta)[0])+' '+Object.values(reposta)[0]+' '+server;
+	return paramDictionary(Object.keys(resposta)[0])+' '+Object.values(resposta)[0];
 }
 
-/** Expoe o arquivo encodado para fora do escopo do evento */
+/** Expõe o arquivo encodado para fora do escopo do evento */
 function retornaBlob(blob){
 	return blob;
 }
@@ -80,8 +61,8 @@ function create_blob(file, callback) {
     var reader = new FileReader();
     reader.onload = function() { callback(reader.result) };
 
-    //The readAsDataURL() method might already encode it as base64 for you. 
-    //You'll probably need to strip out the beginning stuff
+    //O método readAsDataURL() ja retorna um resultado em base64. 
+    //assim vc só vai precisar remover os metadados iniciais
     reader.readAsDataURL(file);
 }
 
@@ -93,7 +74,7 @@ function create_blob2(file, callback) {
 }
 
 
-/** Varias funcoes de file encoding que um dia poderao ser usadas (ou nao)*/
+/** Varias funcoes de file encoding que um dia poderão ser usadas (ou nao)*/
 function encode_utf8(s) {
  return unescape(encodeURIComponent(s));
 }
@@ -153,7 +134,7 @@ function stringToAscii(s) {
 
 function uint8ToBase64(uint8) {
 	var i,
-	extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+	extraBytes = uint8.length % 3, 
 	output = "",
 	temp, length;
 
@@ -161,13 +142,13 @@ function uint8ToBase64(uint8) {
 		return lookup[num >> 18 & 0x3F] + lookup[num >> 12 & 0x3F] + lookup[num >> 6 & 0x3F] + lookup[num & 0x3F];
 	}
 
-	// go through the array every three bytes, we'll deal with trailing stuff later
+	// itera no array every de 3 em 3 bytes
 	for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
 		temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2]);
 		output += tripletToBase64(temp);
 	}
 
-	// this prevents an ERR_INVALID_URL in Chrome (Firefox okay)
+	// Isso evita o ERR_INVALID_URL no Chrome (Firefox okay)
 	switch (output.length % 4) {
 		case 1:
 			output += '=';
@@ -197,25 +178,25 @@ function uploadImage(){
 	fileReader.onload = function(e) {
 	    var xmlHttpRequest = new XMLHttpRequest();
 
-	    //Some AJAX-y stuff - callbacks, handlers etc.
+	    //velho AJAX  - callbacks, handlers etc.
 	    xmlHttpRequest.open("POST", '/', true);
 	    var dashes = '--';
 	    var boundary = 'photoupload';
 	    var crlf = "\r\n";
 
-	    //Post with the correct MIME type (If the OS can identify one)
+	    //Post com o MIME type correto (Se o SO poder identificar um)
 	    if ( fileObject.type == '' ){
 	        filetype = 'application/octet-stream';
 	    } else {
 	        filetype = fileObject.type;
 	    }
 
-	    //Build a HTTP request to post the file
+	    //Monta o HTTP request pra enviar o arquivo
 	    var data = dashes + boundary + crlf + "Content-Disposition: form-data;" + "name=\"file\";" + "filename=\"" + unescape(encodeURIComponent(fileObject.name)) + "\"" + crlf + "Content-Type: " + filetype + crlf + crlf + e.target.result + crlf + dashes + boundary + dashes;
 
 	    xmlHttpRequest.setRequestHeader("Content-Type", "multipart/form-data;boundary=" + boundary);
 
-	    //Send the binary data
+	    //Envia os dados binários
 	    xmlHttpRequest.send(data);
 	}
 
