@@ -11,6 +11,9 @@
 	<link rel="stylesheet" href="css/bootstrap.css" media="screen">
 	<link rel="stylesheet" href="css/bootstrap-responsive.css">
 	<style type="text/css" media="screen">
+		body {
+		padding-top: 60px; /* When using the navbar-top-fixed */
+		}
 		.centralizado {
 			margin: 0 auto;
 			float: none;
@@ -25,15 +28,19 @@
 		.hero-unit {
 		     height: 140px;
 		 }
+		 .form-search,.selectpicker{
+		 	margin:5px 0 0 0
+		 }
 	</style>
 </head>
 <body>
+
+
 	<div class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-					<span class="icon-th-list"></span>
-				</a>
+
+
 				<a href="#" class="brand">Quanto Custa?</a>
 				<div class="nav-collapse collapse">
 					<ul class="nav pull-right">
@@ -50,9 +57,15 @@
 						</li>
 
 						<li class="divider-vertical"></li>
-
 						<li>
-							<form class="form-search">
+							<select class="span2 selectpicker show-tick" name="attribute">
+								<option value="name">Nome</option>
+								<option value="price">Preço</option>
+								<option value="tags">Tags</option>
+							</select>
+						</li>
+						<li>
+							<form class="form-search pull-right">
 								<div class="input-append">
 									<input type="text" class="span2 search-query" placeholder="Procure seu produto">
 									<button type="submit" class="btn">
@@ -398,13 +411,6 @@
 			});
 		});
 
-		$(".form-search").css("margin","5px 0 0 0");
-		/*$(".well").css("margin-left","-15px");
-		//$(".well").css("width","120px");
-		$(".hero-unit").css("margin-bottom","10px");
-		$(".hero-unit").css("height","120px");
-		$("#texto").css("margin","0 0 10px 20px");*/
-
 							/**REST**/
 
 		// A URL raiz para os serviços RESTful
@@ -630,15 +636,27 @@
 		$(".form-search").submit(function(e){
 			console.log("search");
 			e.preventDefault();
-
-			var tags = $(".search-query").val();
-
+			var attribue = $('[name="attribute"]').find('option:selected').val();
+			var value = $(".search-query").val();
 			var array_tags = Array();
-			array_tags = tags.split(' ');
-			console.log(array_tags);
+			var query_string;
+			var tags;
 
+			switch(attribue){
+				case "name":
+					query_string = value;
+				break;
+				case "price":
+					query_string = value;
+				break;
+				case "tags":
+					tags = value;
+					query_string = tags.split(' ');
+				break;
+			}
+			
 			$.ajax({
-				url: rootURL+"/products_search/"+array_tags+".js/",
+				url: rootURL+"/search/"+attribue+"/"+query_string+".js/",
 				dataType: "jsonp",
 				type: "GET",
 				processData: false,
