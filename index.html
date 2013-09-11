@@ -248,8 +248,6 @@
 			console.log('makeRange')
 			var mk = 0;
 		        $.range(vi, rg).forEach(function(v) {
-		           //console.log(d.products[v])
-		           //console.log(d.urls[v])
 		           mk++;
 		        //console.log('v :'+v); // 2, 3, 4, .., 9
 		        foto = d.urls[v]!= "/images/original/missing.png"? d.urls[v] : "./img/semfoto/semfoto.png";
@@ -437,6 +435,8 @@
 				$("#foto_produto").attr("src","");
 				$("#tags_produto").html("Tags : ");
 				$("#categorias_produto").html("");
+				$("#produto_descricao").html("");
+				$("#produto_local").html("Local : ");
 			});
 		});
 
@@ -461,6 +461,7 @@
 		function renderizarLista(data) {
 			d = data;
 			produtos = data.products;
+			console.log(produtos)
 			urls = data.urls;
 
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
@@ -478,7 +479,7 @@
 
 				var idproduto = $(this).closest('li').attr('data-identity');
 
-				$descricao_produto = $("#modal_produto").find('p#descricao_produto');
+				//$descricao_produto = $("#modal_produto").find('p#descricao_produto');
 
 				/**Executa ajax dentro do modal de produto passando id para recuperar os dados do produto*/
 				$("#modal_produto").ready(function(){
@@ -494,6 +495,7 @@
 
 							$("#preco_produto").html("Preço : R$ "+data.product.price);
 							$("#data_produto").html("Data : "+renderData(data.product.created_at));
+							$("#produto_local").html("Local : "+data.product.local.name);
 
 							$("#nome_produto").html(data.name);
 							if(data.foto!="/images/original/missing.png"){
