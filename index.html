@@ -652,6 +652,23 @@
 				}
 			});
 
+			/** PROMOÇÃO */
+            $.ajax({
+				type: 'get',
+				url: rootURL+'/ajax_promotion.js',
+				dataType: "json",
+				contentType: "application/x-www-form-urlencoded;charset=utf-8",
+
+				success: function(data){
+					console.log(data);
+		
+				},
+				error: function(xhjqr,b,c){
+					console.log('error');
+					console.log(xhjqr);
+				}
+    		});
+
 
 			/** LOCAIS */
 			$.ajax({
