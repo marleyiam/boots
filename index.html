@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="css/bootstrap-responsive.css">
 	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/social-buttons.css">
+	<link rel="stylesheet" href="css/datepicker.css">
 	<style type="text/css" media="screen">
 		body {
 		padding-top: 60px; /* When using the navbar-top-fixed */
@@ -344,10 +345,9 @@
 				array_tags = tags.split(' ');
 				 //2013-09-11 23:55:03
 				 promotion = {
-				    "promotion_price": 10.00,
-				    "expires_at":"2013-09-11 23:55:03"
-				  }
-				
+				    "promotion_price": $('[name="preço_promocao"]').val(),
+				    "expires_at":$('[name="expires_at"]').val()
+				}
 
 				cats = $("[name='categorias_produto[]']");
 				category_ids = Array();
