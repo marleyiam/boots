@@ -10,6 +10,8 @@
 	<title>Quanto Custa?</title>
 	<link rel="stylesheet" href="css/bootstrap.css" media="screen">
 	<link rel="stylesheet" href="css/bootstrap-responsive.css">
+	<link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/social-buttons.css">
 	<style type="text/css" media="screen">
 		body {
 		padding-top: 60px; /* When using the navbar-top-fixed */
@@ -35,6 +37,14 @@
 </head>
 <body>
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=475085362501750";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 
 	<div class="navbar navbar-fixed-top navbar-inverse">
 		<div class="navbar-inner">
@@ -122,18 +132,6 @@
 				<div class="container well"> 
 					<!--Listagem de produtos--> 
 
-					<!--<div class="modal hide" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false">
-					        <div class="modal-header">
-					            <h1>Enviando...</h1>
-					        </div>
-					        <div class="modal-body">
-					            <div class="progress progress-striped active">
-					                <div class="bar" style="width: 100%;"></div>
-					            </div>
-					        </div>
-					</div>-->
-
-
 					<ul class="thumbnails">  
 						<div class="pagination" style="text-align:center">  
 							<ul>  
@@ -190,8 +188,18 @@
 	<script src="js/jquery-1.9.1.min.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/functions.js"></script>
+	<script src="js/jquery.maskedinput.min.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/bootstrap-datepicker.pt-BR.js" charset="UTF-8"></script>
 	<script async defer>
 	$(document).ready(function() {
+
+				/** mascaras */
+		        /*$(".telefone").mask("9999-9999");
+		        $(".cpf").mask("999.999.999-99");
+		        $(".cep").mask("99999-999");
+		        $(".data").mask("99/99/9999");*/
+		
 		var image = "";
 
 		/** Include HTMLs*/
@@ -199,7 +207,24 @@
 		$('#this-carousel-id').load('html/carousel.html');
 		$('#texto-container').load('html/texto-container.html');
 		$('#modal-produto-container').load('html/modal-produto-container.html');
-		$('#form-produto-container').load('html/form-produto-container.html');
+		$('#form-produto-container').load('html/form-produto-container.html',function(){
+
+			$('#dp3').datepicker({
+				language: 'pt-BR'
+			});
+
+			$('[name="promocao_produto"]').change(function(){
+			    console.log($('[name="promocao_produto"]').prop('checked'))
+				if($('[name="promocao_produto"]').prop('checked')===true){
+				  $(".check-promocao").css("display","block");  
+				}else{
+				   $(".check-promocao").css("display","none"); 
+				   $('[name="preço_promocao"]').val('');
+				   $('[name="expires_at"]').val('');
+				}
+			});
+		});
+
 		$('#form-local-container').load('html/form-local-container.html');
 		$('#alerts-container').load('html/alerts-container.html');
 
@@ -317,6 +342,12 @@
 				place = $("#local_produto").val();
 				array_tags = Array();
 				array_tags = tags.split(' ');
+				 //2013-09-11 23:55:03
+				 promotion = {
+				    "promotion_price": 10.00,
+				    "expires_at":"2013-09-11 23:55:03"
+				  }
+				
 
 				cats = $("[name='categorias_produto[]']");
 				category_ids = Array();
@@ -329,7 +360,7 @@
 					}
 				});
 
-				dataproduct = { "product":{"name" : name, "price" : price, "description" : desc, "local_id" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image }};
+				dataproduct = { "product":{"name" : name, "price" : price, "description" : desc, "local_id" : place, "tag_list" : array_tags, "category_ids" : category_ids, "image" : image, "promotion" : promotion }};
 
 				//console.log(dataproduct);
 				
