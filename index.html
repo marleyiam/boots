@@ -34,6 +34,17 @@
 		 .form-search,.selectpicker{
 		 	margin:5px 0 0 0
 		 }
+
+		 .more-expensive{
+	 	    color: #CCCCCC;
+	 	    font-weight: normal;
+	 	    /*margin-right: 5px;*/
+	 	    text-decoration: line-through;
+	 	    font-size: 18px;
+		 }
+		 .promotional{
+
+		 }
 	</style>
 </head>
 <body>
@@ -479,11 +490,20 @@
 						contentType: "application/json",
 						success: function(data) {
 							console.log(data.product)
-							console.log(data.product.hasOwnProperty("promotion"))
+							if(data.product.hasOwnProperty("promotion")){
+								$expensivier = ("<span>R$ "+data.product.price+"</span> ");
+
+								$("#preco_produto").append($expensivier)
+								$("#preco_produto").find('span').addClass('more-expensive');
+								$("#preco_produto").append("<span>R$ "+data.product.promotion.promotion_price+"</span> até "+renderData(data.product.promotion.expires_at))
+							}else{
+								$("#preco_produto").html("Preço : R$ "+data.product.price);
+							}
+							 
 							
 							var cats = "Categorias : ";
 
-							$("#preco_produto").html("Preço : R$ "+data.product.price);
+							
 							$("#data_produto").html("Data : "+renderData(data.product.created_at));
 							$("#produto_local").html("Local : "+data.product.local.name);
 

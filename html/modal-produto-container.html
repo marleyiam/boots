@@ -3,6 +3,7 @@
 	<div class="modal-header">  
 		<a class="close" data-dismiss="modal">×</a>  
 		<h3 id="preco_produto">Preço :</h3> 
+		<h3 id="preco_promocional"></h3>
 		<h4 id="data_produto">Data :</h4> 
 	</div>  
 	<div class="modal-body">  
@@ -19,11 +20,10 @@
 
 <div class="fb-like" data-href="http://developers.facebook.com/docs/reference/plugins/like" data-width="450" data-layout="button_count" data-show-faces="false" data-send="false"></div>
 		
-
 		<a href="#" 
 		  onclick="
 		    window.open(
-		      'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href), 
+		      'encodeURIComponent(location.href), 
 		      'facebook-share-dialog', 
 		      'width=626,height=436'); 
 		    return false;"><img src="http://thepottershouse.org/echurch/images/fbshare.png" alt="">
