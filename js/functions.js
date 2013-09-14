@@ -1,4 +1,55 @@
 
+/** Reimplementação do forEach */
+if(!Array.prototype.forEach) {
+  Array.prototype.forEach = function(fun /*, thisp*/) {
+    var len = this.length >>> 0;
+    if(typeof fun != "function")
+      throw new TypeError();
+
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++) {
+      if (i in this)
+        fun.call(thisp, this[i], i, this);
+    }
+  };
+}
+
+$.extend({
+    range:  function() {
+        if (!arguments.length) { return []; }
+        var min, max, step;
+        if (arguments.length == 1) {
+            min  = 0;
+            max  = arguments[0]-1;
+            step = 1;
+        }
+        else {
+            min  = arguments[0];
+            max  = arguments[1]-1;
+            step = arguments[2] || 1;
+        }
+        if (step < 0 && min >= max) {
+            step *= -1;
+            var tmp = min;
+            min = max;
+            max = tmp;
+            min += ((max-min) % step);
+        }
+        var a = [];
+        for (var i = min; i <= max; i += step) { a.push(i); }
+        return a;
+    }
+});
+/** Reimplementação do forEach */
+
+/** Helper pra Data */
+function renderData(data){
+	subs = data.substr(0,10);
+	dataArray = subs.split('-');
+
+	return dataArray[2]+"/"+dataArray[1]+"/"+dataArray[0];
+}
+
 Object.values = function (obj) {
 	var vals = [];
 	for( var key in obj ) {
@@ -9,6 +60,7 @@ Object.values = function (obj) {
 	return vals;
 }
 
+/** Helper pras validações*/
 function paramDictionary(obj){
 	key = obj;
 	str ='';

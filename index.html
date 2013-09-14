@@ -57,7 +57,7 @@
 					<ul class="nav pull-right">
 						<li><a href="#">Home</a></li>
 						<li><a href="#">About Us</a></li>
-						<li><a href="#">Contact</a></li>
+						<li><a href="#" name="promotions">Promoções</a></li>
 
 						<li class="dropdown">
 						 <a class="dropdown-toggle" data-toggle="dropdown"
@@ -229,46 +229,6 @@
 		$('#form-local-container').load('html/form-local-container.html');
 		$('#alerts-container').load('html/alerts-container.html');
 
-		if(!Array.prototype.forEach) {
-		  Array.prototype.forEach = function(fun /*, thisp*/) {
-		    var len = this.length >>> 0;
-		    if(typeof fun != "function")
-		      throw new TypeError();
-
-		    var thisp = arguments[1];
-		    for (var i = 0; i < len; i++) {
-		      if (i in this)
-		        fun.call(thisp, this[i], i, this);
-		    }
-		  };
-		}
-
-		$.extend({
-		    range:  function() {
-		        if (!arguments.length) { return []; }
-		        var min, max, step;
-		        if (arguments.length == 1) {
-		            min  = 0;
-		            max  = arguments[0]-1;
-		            step = 1;
-		        }
-		        else {
-		            min  = arguments[0];
-		            max  = arguments[1]-1;
-		            step = arguments[2] || 1;
-		        }
-		        if (step < 0 && min >= max) {
-		            step *= -1;
-		            var tmp = min;
-		            min = max;
-		            max = tmp;
-		            min += ((max-min) % step);
-		        }
-		        var a = [];
-		        for (var i = min; i <= max; i += step) { a.push(i); }
-		        return a;
-		    }
-		});
 
 		function makeRange(vi,rg){
 			console.log('makeRange')
@@ -443,15 +403,18 @@
 						$msg.removeClass("alert alert-error");
 						$msg.addClass("alert alert-success");
 						$msg.html("Seu local foi cadastrado com sucesso !!!");
+						$msg.fadeOut(7000,function(){
+							$msg.html("Cadastre seu Local !");
+							$msg.removeClass("alert alert-success");
+							$msg.css("display","block");
+						});
 					},
 					error: function(xhjqr,b,c){
 						console.log(xhjqr);
-						console.log(b);
-						console.log(c);
 						$msg = $("#formLocal").find("div.modal-header").find("h3");
 						//$msg.html(printError(xhjqr)).addClass("alert alert-error");
 						//$msg.show(2000);
-					},
+					}
 				});
 			});
 		});
@@ -482,17 +445,10 @@
 		// Recupera a lista de Produtos (quando a applicação starta)
 		findAll();
 
-		function renderData(data){
-			subs = data.substr(0,10);
-			dataArray = subs.split('-');
-	
-			return dataArray[2]+"/"+dataArray[1]+"/"+dataArray[0];
-		}
-
 		function renderizarLista(data) {
 			d = data;
 			produtos = data.products;
-			console.log(produtos)
+			//console.log(produtos)
 			urls = data.urls;
 
 			//remove os itens da lista de produtos para adiciona-los já atualizados em seguida
@@ -522,6 +478,9 @@
 						processData: false,
 						contentType: "application/json",
 						success: function(data) {
+							console.log(data.product)
+							console.log(data.product.hasOwnProperty("promotion"))
+							
 							var cats = "Categorias : ";
 
 							$("#preco_produto").html("Preço : R$ "+data.product.price);
@@ -653,21 +612,23 @@
 			});
 
 			/** PROMOÇÃO */
-            $.ajax({
-				type: 'get',
-				url: rootURL+'/ajax_promotion.js',
-				dataType: "json",
-				contentType: "application/x-www-form-urlencoded;charset=utf-8",
+			$('[name="promotions"]').on('click',function(){
+	            $.ajax({
+					type: 'get',
+					url: rootURL+'/ajax_promotion.js',
+					dataType: "json",
+					contentType: "application/x-www-form-urlencoded;charset=utf-8",
 
-				success: function(data){
-					console.log(data);
-		
-				},
-				error: function(xhjqr,b,c){
-					console.log('error');
-					console.log(xhjqr);
-				}
-    		});
+					success: function(data){
+						//console.log(data);
+						renderizarLista(data);
+					},
+					error: function(xhjqr,b,c){
+						console.log('error');
+						console.log(xhjqr);
+					}
+	    		});
+			});
 
 
 			/** LOCAIS */
